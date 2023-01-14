@@ -13,16 +13,26 @@
 
 ## 🏁 Running Tests <a name = "run_tests"></a>
 
+### Install
+
 Clone the repo:
 
 ```
 git clone <repo_name>
+cd <repo_name>
 ```
 
-Install and run the tests:
+Install Node Modules
 
 ```
 npm install
+```
+
+### Running tests
+
+To run all tests:
+
+```
 npm test
 ```
 
