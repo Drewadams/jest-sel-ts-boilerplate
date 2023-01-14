@@ -32,7 +32,7 @@ export default class LoginPage extends DefaultPage {
 		saveState?: boolean;
 	}): Promise<User> {
 		const email = params?.email ?? "drewistesting+automated@gmail.com";
-		const pass = params?.pass ?? "qwertyuiop";
+		const pass = params?.pass ?? (process.env.PASSWORD as string);
 		if (!(await this.driver.findElement(this.emailInput).isDisplayed())) {
 			await this.goto();
 		}
