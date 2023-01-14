@@ -37,3 +37,15 @@ For a single test file:
 ```
 npm test -- "test_file_name"
 ```
+
+To run the tests in watch mode (run on save):
+
+```
+npm run test:watch
+```
+
+To view the report as an html file:
+
+```
+npm run test:report
+```
