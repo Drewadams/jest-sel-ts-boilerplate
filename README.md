@@ -22,7 +22,7 @@ git clone <repo_name>
 cd <repo_name>
 ```
 
-Install Node Modules
+Install Node modules:
 
 ```
 npm install
