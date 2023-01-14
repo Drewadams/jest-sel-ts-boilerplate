@@ -9,7 +9,7 @@ const screenSize = {
 
 // jest.setTimeout(30000);
 
-test("should first", async () => {
+test("Chrome: Login", async () => {
 	const options = new Options().headless().windowSize(screenSize); //.addArguments("--start-maximized");
 	const driver = EasyBuild("chrome", options);
 	const page = new LoginPage(driver);
@@ -18,4 +18,8 @@ test("should first", async () => {
 	await page.logIn({ saveState: true });
 	await page.takeScreenshot({ title: "post-login" });
 	await driver.quit();
+});
+
+test("test 2", async () => {
+	console.log("second test ran");
 });
