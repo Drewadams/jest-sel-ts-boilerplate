@@ -1,23 +1,21 @@
-require("chromedriver");
-import { Builder, By, until } from "selenium-webdriver";
+import EasyBuild from "./utils/easybuilder";
+import LoginPage from "./pages/login";
 import { Options } from "selenium-webdriver/chrome";
 
 const screenSize = {
-	width: 640,
-	height: 480,
+	width: 1920 * 0.9,
+	height: 1080 * 0.9,
 };
 
-test("should first", async () => {
-	// const options = new Options().headless().windowSize(screenSize);
-	const driver = new Builder()
-		.forBrowser("chrome")
-		// .setChromeOptions(options)
-		.build();
-	await driver.get("https://leanin.org/login?next=https://leanin.org/#signin");
+// jest.setTimeout(30000);
 
+test("should first", async () => {
+	const options = new Options().headless().windowSize(screenSize); //.addArguments("--start-maximized");
+	const driver = EasyBuild("chrome", options);
+	const page = new LoginPage(driver);
+	await page.goto();
+	await page.takeScreenshot({ title: "pre-login" });
+	await page.logIn({ saveState: true });
+	await page.takeScreenshot({ title: "post-login" });
 	await driver.quit();
 });
-
-/*
-	Add in some clicks and a form submit. 
-*/

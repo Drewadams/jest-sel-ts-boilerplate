@@ -4,6 +4,7 @@
  */
 
 export default {
+	testTimeout: 10000,
 	// All imported modules in your tests should be mocked automatically
 	// automock: false,
 
@@ -106,7 +107,16 @@ export default {
 	// projects: undefined,
 
 	// Use this configuration option to add custom reporters to Jest
-	// reporters: undefined,
+	reporters: [
+		"default",
+		[
+			"./node_modules/jest-html-reporter",
+			{
+				pageTitle: "Test Report",
+				outputPath: "./__tests__/reports/test-report.html",
+			},
+		],
+	],
 
 	// Automatically reset mock state before every test
 	// resetMocks: false,
@@ -153,10 +163,7 @@ export default {
 	// testLocationInResults: false,
 
 	// The glob patterns Jest uses to detect test files
-	// testMatch: [
-	//   "**/__tests__/**/*.[jt]s?(x)",
-	//   "**/?(*.)+(spec|test).[tj]s?(x)"
-	// ],
+	testMatch: ["**/?(*.)+(spec|test).[tj]s?(x)"],
 
 	// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
 	// testPathIgnorePatterns: [

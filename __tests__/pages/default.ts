@@ -1,4 +1,9 @@
-import { WebElement, WebDriver, until, Locator } from "selenium-webdriver";
+import { WebElement, WebDriver, until, By } from "selenium-webdriver";
+import * as fs from "fs";
+import { config } from "dotenv";
+import pathStripper from "../utils/pathStripper";
+
+config();
 
 export default class DefaultPage {
 	driver: WebDriver;
@@ -18,14 +23,27 @@ export default class DefaultPage {
 		return element;
 	}
 
-	async waitForElementLocated(element: Locator): Promise<WebElement> {
-		try {
-			await this.driver.wait(until.elementLocated(element));
-		} catch (err) {
-			if (err instanceof Error) {
-				throw err;
+	async takeScreenshot(options?: { path?: string; title?: string }) {
+		const ss = await this.driver.takeScreenshot(); // Playwright does full page natively, this doesn't. Sucky.
+
+		// Jest uses the location of the config as the rootdir. Thus: './' should start us in the top level of the directory instead of __tests__.
+		fs.writeFileSync(
+			options?.path ??
+				`./__tests__/data/screenshots/${
+					options?.title ?? pathStripper(await this.driver.getTitle())
+				}.png`,
+			ss,
+			{
+				encoding: "base64",
 			}
-		}
-		return this.driver.findElement(element);
+		);
+	}
+
+	getDate(): string {
+		return new Date().toLocaleDateString().replace(/\//g, "-");
+	}
+
+	find(by: By): WebElement {
+		return this.driver.findElement(by);
 	}
 }
