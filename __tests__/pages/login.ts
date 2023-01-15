@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { PathLike, writeFileSync } from "fs";
 import { WebDriver, By, until } from "selenium-webdriver";
 import DefaultPage from "./default";
 
@@ -29,8 +29,8 @@ export default class LoginPage extends DefaultPage {
 	async logIn(params: {
 		email?: string;
 		pass?: string;
-		saveState?: boolean;
-	}): Promise<User> {
+		saveState?: { on: boolean; path?: PathLike };
+	}): Promise<{ user: User; statePath?: PathLike }> {
 		const email = params?.email ?? "drewistesting+automated@gmail.com";
 		const pass = params?.pass ?? (process.env.PASSWORD as string);
 		if (!(await this.driver.findElement(this.emailInput).isDisplayed())) {
@@ -46,13 +46,16 @@ export default class LoginPage extends DefaultPage {
 		);
 		// const url = await this.driver.getCurrentUrl();
 		// expect(url).toBe("");
-		if (params.saveState) {
+		let statePath = undefined;
+		if (params.saveState?.on) {
+			statePath =
+				params.saveState.path ?? "./__tests__/data/secure/auth-state.json";
 			const cookies = await this.driver.manage().getCookies();
-			writeFileSync(
-				"./__tests__/data/secure/auth-state.json",
-				JSON.stringify(cookies, null, 2)
-			);
+			writeFileSync(statePath, JSON.stringify(cookies, null, 2));
 		}
-		return { email, pass };
+		return {
+			user: { email, pass } as User,
+			statePath: statePath,
+		};
 	}
 }
