@@ -1,8 +1,8 @@
 {
 	"name": "jest-sel-ts-boilerplate",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"description": "Quick start for Selenium testing using TypeScript. Jest as test runner.",
+	"main": "",
 	"scripts": {
 		"test": "jest",
 		"test:report": "start ./__tests__/reports/test-report.html",
