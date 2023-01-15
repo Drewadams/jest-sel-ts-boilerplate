@@ -53,8 +53,10 @@ export default class DefaultPage {
 		return this.driver.findElement(by);
 	}
 
-	async addCookies(path?: fs.PathLike, cookie?: IWebDriverCookie) {
-		path = path ?? "./__tests__/data/secure/auth-state.json";
+	async addCookies(
+		path: fs.PathLike = "./__tests__/data/secure/auth-state.json",
+		cookie?: IWebDriverCookie
+	) {
 		const json = JSON.parse(fs.readFileSync(path, { encoding: "utf-8" }));
 		if (cookie) {
 			await this.driver.manage().addCookie(cookie);

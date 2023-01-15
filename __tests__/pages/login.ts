@@ -26,11 +26,9 @@ export default class LoginPage extends DefaultPage {
 		return path;
 	}
 
-	async logIn(params: {
-		email?: string;
-		pass?: string;
-		saveState?: { on: boolean; path?: PathLike };
-	}): Promise<{ user: User; statePath?: PathLike }> {
+	async logIn(
+		params: LoginParams
+	): Promise<{ user: User; statePath?: PathLike }> {
 		const email = params?.email ?? "drewistesting+automated@gmail.com";
 		const pass = params?.pass ?? (process.env.PASSWORD as string);
 		if (!(await this.driver.findElement(this.emailInput).isDisplayed())) {
@@ -58,4 +56,10 @@ export default class LoginPage extends DefaultPage {
 			statePath: statePath,
 		};
 	}
+}
+
+interface LoginParams {
+	email?: string;
+	pass?: string;
+	saveState?: { on: boolean; path?: PathLike };
 }
