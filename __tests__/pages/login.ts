@@ -48,7 +48,6 @@ export default class LoginPage extends DefaultPage {
 		// expect(url).toBe("");
 		if (params.saveState) {
 			const cookies = await this.driver.manage().getCookies();
-
 			writeFileSync(
 				"./__tests__/data/secure/auth-state.json",
 				JSON.stringify(cookies, null, 2)

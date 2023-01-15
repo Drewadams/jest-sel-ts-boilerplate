@@ -1,4 +1,10 @@
-import { WebElement, WebDriver, until, By } from "selenium-webdriver";
+import {
+	WebElement,
+	WebDriver,
+	until,
+	By,
+	IWebDriverCookie,
+} from "selenium-webdriver";
 import * as fs from "fs";
 import { config } from "dotenv";
 import pathStripper from "../utils/pathStripper";
@@ -45,5 +51,17 @@ export default class DefaultPage {
 
 	find(by: By): WebElement {
 		return this.driver.findElement(by);
+	}
+
+	async addCookies(path?: fs.PathLike, cookie?: IWebDriverCookie) {
+		path = path ?? "./__tests__/data/secure/auth-state.json";
+		const json = JSON.parse(fs.readFileSync(path, { encoding: "utf-8" }));
+		if (cookie) {
+			await this.driver.manage().addCookie(cookie);
+		} else {
+			for (const storedCookie of json) {
+				await this.driver.manage().addCookie(storedCookie);
+			}
+		}
 	}
 }
