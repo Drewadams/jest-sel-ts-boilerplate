@@ -1,7 +1,7 @@
-import EasyBuild from "./utils/easybuilder";
+import { EasyBuilder } from "./utils/easybuilder";
 import LoginPage from "./pages/login";
-import { Options } from "selenium-webdriver/chrome";
-import { WebDriver } from "selenium-webdriver";
+import { Options as ChromeOptions } from "selenium-webdriver/chrome";
+import { ThenableWebDriver } from "selenium-webdriver";
 import { rmSync, existsSync } from "fs";
 
 const screenSize = {
@@ -11,7 +11,7 @@ const screenSize = {
 
 // jest.setTimeout(30000);
 
-let driver: WebDriver;
+let driver: ThenableWebDriver;
 let page: LoginPage;
 const authPath = "./__tests__/data/secure/auth-state.json";
 
@@ -22,8 +22,8 @@ beforeAll(() => {
 });
 
 beforeEach(async () => {
-	const options = new Options().headless().windowSize(screenSize); //.addArguments("--start-maximized");
-	driver = EasyBuild("chrome", options);
+	const options = new ChromeOptions().headless().windowSize(screenSize); //.addArguments("--start-maximized");
+	driver = new EasyBuilder(options).buildChrome();
 	page = new LoginPage(driver);
 });
 
