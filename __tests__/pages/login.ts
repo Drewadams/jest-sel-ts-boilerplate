@@ -2,6 +2,11 @@ import { PathLike, writeFileSync } from "fs";
 import { WebDriver, By, until } from "selenium-webdriver";
 import DefaultPage from "./default";
 
+interface LoginParams {
+	email?: string;
+	pass?: string;
+	saveState?: { on: boolean; path?: PathLike };
+}
 export default class LoginPage extends DefaultPage {
 	driver: WebDriver;
 	passwordInput = By.id("signin-password");
@@ -56,10 +61,4 @@ export default class LoginPage extends DefaultPage {
 			statePath: statePath,
 		};
 	}
-}
-
-interface LoginParams {
-	email?: string;
-	pass?: string;
-	saveState?: { on: boolean; path?: PathLike };
 }
