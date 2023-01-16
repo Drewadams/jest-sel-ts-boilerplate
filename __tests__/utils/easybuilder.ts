@@ -2,14 +2,13 @@ import { Builder, ThenableWebDriver } from "selenium-webdriver";
 import { Options as ChromeOptions } from "selenium-webdriver/chrome";
 import { Options as FFOptions } from "selenium-webdriver/firefox";
 
-interface ChromeBuilder {
-	driver: "chrome";
-	options?: ChromeOptions;
+interface ViewportSize {
+	width: number;
+	height: number;
 }
-
-interface FFBuilder {
-	driver: "firefox";
-	options?: FFOptions;
+interface BuildOptions {
+	viewport?: ViewportSize;
+	headless?: boolean;
 }
 
 /**
@@ -18,27 +17,6 @@ interface FFBuilder {
  * @param builder {driver: "chrome" | "firefox", options: ChromeOptions | FFOptions}
  * @returns TheneableWebDriver
  */
-
-// export default function EasyBuild(
-// 	builder: ChromeBuilder | FFBuilder
-// ): ThenableWebDriver {
-// 	if (builder.driver === "chrome") {
-// 		return new Builder()
-// 			.forBrowser("chrome")
-// 			.setChromeOptions(builder.options as ChromeOptions)
-// 			.build();
-// 	}
-
-// 	if (builder.driver === "firefox") {
-// 		return new Builder()
-// 			.forBrowser("firefox")
-// 			.setFirefoxOptions(builder.options as FFOptions)
-// 			.build();
-// 	}
-
-// 	throw new Error("Driver not found.");
-// }
-
 export class EasyBuilder extends Builder {
 	options;
 	constructor(options?: ChromeOptions | FFOptions | undefined) {
@@ -46,17 +24,29 @@ export class EasyBuilder extends Builder {
 		this.options = options;
 	}
 
-	buildChrome(): ThenableWebDriver {
+	buildChrome({ viewport, headless }: BuildOptions = {}): ThenableWebDriver {
 		require("chromedriver");
-		return this.forBrowser("chrome")
-			.setChromeOptions(this.options as ChromeOptions)
-			.build();
+		if (viewport) {
+			const browserOptions = new ChromeOptions().windowSize(viewport);
+			if (headless) {
+				browserOptions.headless();
+			}
+			return this.forBrowser("chrome").setChromeOptions(browserOptions).build();
+		}
+		return this.forBrowser("chrome").build();
 	}
 
-	buildFirefox(): ThenableWebDriver {
+	buildFirefox({ viewport, headless }: BuildOptions = {}): ThenableWebDriver {
 		require("geckodriver");
-		return this.forBrowser("firefox")
-			.setFirefoxOptions(this.options as FFOptions)
-			.build();
+		if (viewport) {
+			const browserOptions = new FFOptions().windowSize(viewport);
+			if (headless) {
+				browserOptions.headless();
+			}
+			return this.forBrowser("firefox")
+				.setFirefoxOptions(browserOptions)
+				.build();
+		}
+		return this.forBrowser("firefox").build();
 	}
 }
