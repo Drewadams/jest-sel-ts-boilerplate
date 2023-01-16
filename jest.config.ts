@@ -110,10 +110,12 @@ export default {
 	reporters: [
 		"default",
 		[
-			"./node_modules/jest-html-reporter",
+			"jest-html-reporters",
 			{
 				pageTitle: "Test Report",
-				outputPath: "./__tests__/reports/test-report.html",
+				publicPath: "./__tests__/reports",
+				filename: "report.html",
+				openReport: true,
 			},
 		],
 	],

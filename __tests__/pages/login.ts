@@ -31,11 +31,12 @@ export default class LoginPage extends DefaultPage {
 		return path;
 	}
 
-	async logIn(
-		params: LoginParams
-	): Promise<{ user: User; statePath?: PathLike }> {
-		const email = params?.email ?? "drewistesting+automated@gmail.com";
-		const pass = params?.pass ?? (process.env.PASSWORD as string);
+	async logIn({ email, pass, saveState }: LoginParams = {}): Promise<{
+		user: User;
+		statePath?: PathLike;
+	}> {
+		email = email ?? "drewistesting+automated@gmail.com";
+		pass = pass ?? (process.env.PASSWORD as string);
 		if (!(await this.driver.findElement(this.emailInput).isDisplayed())) {
 			await this.goto();
 		}
@@ -49,16 +50,18 @@ export default class LoginPage extends DefaultPage {
 		);
 		// const url = await this.driver.getCurrentUrl();
 		// expect(url).toBe("");
-		let statePath = undefined;
-		if (params.saveState?.on) {
-			statePath =
-				params.saveState.path ?? "./__tests__/data/secure/auth-state.json";
+		if (saveState?.on) {
+			const statePath =
+				saveState.path ?? "./__tests__/data/secure/auth-state.json";
 			const cookies = await this.driver.manage().getCookies();
 			writeFileSync(statePath, JSON.stringify(cookies, null, 2));
+			return {
+				user: { email, pass },
+				statePath: statePath,
+			};
 		}
 		return {
-			user: { email, pass } as User,
-			statePath: statePath,
+			user: { email, pass },
 		};
 	}
 }

@@ -22,8 +22,11 @@ beforeAll(() => {
 });
 
 beforeEach(async () => {
-	const options = new ChromeOptions().headless().windowSize(screenSize); //.addArguments("--start-maximized");
-	driver = new EasyBuilder(options).buildChrome();
+	// const options = new ChromeOptions().headless().windowSize(screenSize).addArguments("--start-maximized");
+	driver = new EasyBuilder().buildChrome({
+		viewport: screenSize,
+		headless: true,
+	});
 	page = new LoginPage(driver);
 });
 
