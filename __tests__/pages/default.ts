@@ -29,20 +29,23 @@ export default class DefaultPage {
 		return element;
 	}
 
-	async takeScreenshot(options?: { path?: string; title?: string }) {
+	async takeScreenshot({
+		dirPath,
+		title,
+	}: {
+		dirPath?: string;
+		title?: string;
+	}): Promise<string> {
 		const ss = await this.driver.takeScreenshot(); // Playwright does full page natively, this doesn't. Sucky.
 
 		// Jest uses the location of the config as the rootdir. Thus: './' should start us in the top level of the directory instead of __tests__.
-		fs.writeFileSync(
-			options?.path ??
-				`./__tests__/data/screenshots/${
-					options?.title ?? pathStripper(await this.driver.getTitle())
-				}.png`,
-			ss,
-			{
-				encoding: "base64",
-			}
-		);
+		const path = `${dirPath ?? "./__tests__/data/screenshots"}/${
+			title ?? pathStripper(await this.driver.getTitle())
+		}.png`;
+		fs.writeFileSync(path, ss, {
+			encoding: "base64",
+		});
+		return path;
 	}
 
 	getDate(): string {
