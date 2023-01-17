@@ -33,7 +33,7 @@ beforeEach(async () => {
 test("Chrome: Login", async () => {
 	await page.goto();
 	await page.takeScreenshot({ title: "pre-login" });
-	await page.logIn({ saveState: { on: true } });
+	await page.logIn({ saveState: true });
 	await page.takeScreenshot({ title: "post-login" });
 	await driver.quit();
 });

@@ -5,7 +5,7 @@ import DefaultPage from "./default";
 interface LoginParams {
 	email?: string;
 	pass?: string;
-	saveState?: { on: boolean; path?: PathLike };
+	saveState?: true | PathLike;
 }
 export default class LoginPage extends DefaultPage {
 	driver: WebDriver;
@@ -49,10 +49,12 @@ export default class LoginPage extends DefaultPage {
 			)
 		);
 		// const url = await this.driver.getCurrentUrl();
-		// expect(url).toBe("");
-		if (saveState?.on) {
+		// expect(url).toEqual("");
+		if (saveState) {
 			const statePath =
-				saveState.path ?? "./__tests__/data/secure/auth-state.json";
+				typeof saveState != "boolean"
+					? saveState
+					: "./__tests__/data/secure/auth-state.json";
 			const cookies = await this.driver.manage().getCookies();
 			writeFileSync(statePath, JSON.stringify(cookies, null, 2));
 			return {
