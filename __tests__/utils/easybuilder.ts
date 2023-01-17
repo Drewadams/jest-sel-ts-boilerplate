@@ -49,4 +49,39 @@ export class EasyBuilder extends Builder {
 		}
 		return this.forBrowser("firefox").build();
 	}
+
+	/**
+	 *
+	 * @param viewport: Size of viewport.
+	 * @param headless: Boolean - whether to run browsers headless.
+	 * @returns
+	 */
+	buildCrossBrowser({ viewport, headless }: BuildOptions = {}): Array<{
+		browserName: "chrome" | "firefox";
+		driver: ThenableWebDriver;
+	}> {
+		require("geckodriver");
+		require("chromedriver");
+
+		let ffOptions = new FFOptions();
+		let cOptions = new ChromeOptions();
+		if (viewport) {
+			ffOptions.windowSize(viewport);
+			cOptions.windowSize(viewport);
+			if (headless) {
+				ffOptions.headless();
+				cOptions.headless();
+			}
+		}
+		return [
+			{
+				browserName: "chrome",
+				driver: this.forBrowser("chrome").setChromeOptions(cOptions).build(),
+			},
+			{
+				browserName: "firefox",
+				driver: this.forBrowser("firefox").setFirefoxOptions(ffOptions).build(),
+			},
+		];
+	}
 }
