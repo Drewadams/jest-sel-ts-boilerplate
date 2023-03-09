@@ -35,7 +35,7 @@ export default class LoginPage extends DefaultPage {
 		user: User;
 		statePath?: PathLike;
 	}> {
-		email = email ?? "drewistesting+automated@gmail.com";
+		email = email ?? (process.env.EMAIL as string);
 		pass = pass ?? (process.env.PASSWORD as string);
 		if (!(await this.driver.findElement(this.emailInput).isDisplayed())) {
 			await this.goto();
